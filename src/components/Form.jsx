@@ -35,7 +35,7 @@ class Form extends Component {
         return (
             <form onSubmit={this.handleSubmit}>
                 <input type="text" value={this.state.inputValue} onChange={this.handleChange} />
-                <button type="submit">Submit</button>
+                <button type="submit">{this.props.buttonText}</button>
             </form>
         );
     }
