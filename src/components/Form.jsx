@@ -1,42 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Form extends Component {
+class Form extends React.Component {
     constructor(props) {
         super(props);
-        console.log('Constructor called');
         this.state = {
-            inputValue: '',
+            count: 0,
         };
     }
 
-    componentDidMount() {
-        console.log('ComponentDidMount called');
-    }
-
-    componentDidUpdate() {
-        console.log('ComponentDidUpdate called');
-    }
-
-    componentWillUnmount() {
-        console.log('ComponentWillUnmount called');
-    }
-
-    handleChange = (event) => {
-        this.setState({ inputValue: event.target.value });
-    };
-
-    handleSubmit = (event) => {
-        event.preventDefault();
-        console.log('Form submitted:', this.state.inputValue);
+    onClick = () => {
+        this.setState({ count: this.state.count + 1 });
     };
 
     render() {
-        console.log('Render called');
         return (
-            <form onSubmit={this.handleSubmit}>
-                <input type="text" value={this.state.inputValue} onChange={this.handleChange} />
-                <button type="submit">{this.props.buttonText}</button>
-            </form>
+            <div>
+                <p>{this.state.count}</p>
+                <button onClick={this.onClick}>Click to increase value</button>
+            </div>
         );
     }
 }

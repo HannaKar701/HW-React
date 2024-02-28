@@ -5,6 +5,7 @@ import Text from './components/Text';
 import Fieldset from './components/Fieldset';
 
 import './App.css';
+import MyComponent from './components/MyComponent';
 
 class App extends React.Component {
     setName() {
@@ -24,6 +25,7 @@ class App extends React.Component {
                     secInput={this.setName()}
                     thirdInput={{ name: 'Hanna' }}
                 />
+                <MyComponent />
             </div>
         );
     }
