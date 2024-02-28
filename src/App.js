@@ -1,34 +1,45 @@
 import React from 'react';
-import Form from './components/Form';
-import Image from './components/Image';
-import Text from './components/Text';
-import Fieldset from './components/Fieldset';
+import ChildComponent from './components/ChildComponent';
 
 import './App.css';
-import MyComponent from './components/MyComponent';
-
-class App extends React.Component {
-    setName() {
-        return 'Hello';
+class ParentComponent extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            counter: 0,
+        };
     }
+
+    increase = () => {
+        this.setState({ counter: this.state.counter + 1 });
+    };
+
+    throwOff = () => {
+        this.setState({ counter: 0 });
+    };
+
+    setRandomValue = () => {
+        this.setState({ counter: Math.ceil(Math.random() * 10) });
+    };
+
+    reduce = () => {
+        this.state.counter > 0
+            ? this.setState({ counter: this.state.counter - 1 })
+            : this.setState({ counter: this.state.counter });
+    };
 
     render() {
         return (
             <div className="wrapper">
-                <h1>My form:</h1>
-                <Form buttonText="Submit" />
-                <Image text="Text for picture" />
-                <Text text="React-section Text" />
-                <Fieldset
-                    text={555555555555}
-                    firstInput={['Variant 1']}
-                    secInput={this.setName()}
-                    thirdInput={{ name: 'Hanna' }}
-                />
-                <MyComponent />
+                <p>{this.state.counter}</p>
+                <button onClick={this.increase}>Increase</button>
+                <button onClick={this.throwOff}>Throw off</button>
+                <button onClick={this.setRandomValue}>Random value</button>
+                <button onClick={this.reduce}>Reduce</button>
+                <ChildComponent name="Hanna" value={this.state.counter} />
             </div>
         );
     }
 }
 
-export default App;
+export default ParentComponent;
