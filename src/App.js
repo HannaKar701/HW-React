@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import './App.css';
 
-class LifecycleComponent extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            count: 0,
-        };
-        this.token =
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFubmFhbmVjaGthMTExOTk5QGdtYWlsLmNvbSIsImlkIjoyODgsImlhdCI6MTcwOTM4MDI4OH0._kfiGuflpDTzJYNLPxZGp8aDC6J_Bu8hGXXuLulKYMM';
-    }
+const LifecycleComponent = () => {
+    const [count, setCount] = React.useState(0);
+    const token =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFubmFhbmVjaGthMTExOTk5QGdtYWlsLmNvbSIsImlkIjoyODgsImlhdCI6MTcwOTM4MDI4OH0._kfiGuflpDTzJYNLPxZGp8aDC6J_Bu8hGXXuLulKYMM';
 
-    getList = async (param) => {
+    const raiseCount = () => {
+        setCount((count) => count + 1);
+    };
+
+    const getList = async (param) => {
         try {
             if (param === true) {
                 let response = await fetch(
@@ -21,7 +20,7 @@ class LifecycleComponent extends React.Component {
                         method: 'GET',
                         headers: {
                             accept: 'application/json',
-                            Authorization: `Bearer ${this.token}`,
+                            Authorization: `Bearer ${token}`,
                         },
                     },
                 );
@@ -34,7 +33,7 @@ class LifecycleComponent extends React.Component {
                         method: 'GET',
                         headers: {
                             accept: 'application/json',
-                            Authorization: `Bearer ${this.token}`,
+                            Authorization: `Bearer ${token}`,
                         },
                     },
                 );
@@ -46,34 +45,23 @@ class LifecycleComponent extends React.Component {
         }
     };
 
-    raiseCount = () => {
-        this.setState((state) => ({ count: state.count + 1 }));
-    };
+    useEffect(() => {
+        getList(false);
+        return () => {
+            console.log('Unmount');
+        };
+    }, []);
 
-    componentDidMount() {
-        this.getList(false);
-    }
+    useEffect(() => {
+        console.log(`Значение изменено: ${count}`);
+    }, [count]);
 
-    shouldComponentUpdate() {
-        return this.state.count % 2 !== 0;
-    }
-
-    componentDidUpdate() {
-        console.log(`Count updated: ${this.state.count}`);
-    }
-
-    componentWillUnmount() {
-        console.log('UnMount');
-    }
-
-    render() {
-        return (
-            <div>
-                <p>Счет: {this.state.count}</p>
-                <button onClick={this.raiseCount}>Увеличить</button>
-            </div>
-        );
-    }
-}
+    return (
+        <div>
+            {count % 2 === 0 ? <p>Счет: {count}</p> : <p>Счет: {count - 1}</p>}
+            <button onClick={raiseCount}>Увеличить</button>
+        </div>
+    );
+};
 
 export default LifecycleComponent;
