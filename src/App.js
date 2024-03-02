@@ -1,45 +1,79 @@
 import React from 'react';
-import ChildComponent from './components/ChildComponent';
 
 import './App.css';
-class ParentComponent extends React.Component {
+
+class LifecycleComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            counter: 0,
+            count: 0,
         };
+        this.token =
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFubmFhbmVjaGthMTExOTk5QGdtYWlsLmNvbSIsImlkIjoyODgsImlhdCI6MTcwOTM4MDI4OH0._kfiGuflpDTzJYNLPxZGp8aDC6J_Bu8hGXXuLulKYMM';
     }
 
-    increase = () => {
-        this.setState({ counter: this.state.counter + 1 });
+    getList = async (param) => {
+        try {
+            if (param === true) {
+                let response = await fetch(
+                    'https://todo-redev.herokuapp.com/api/todos?isCompleted=true',
+                    {
+                        method: 'GET',
+                        headers: {
+                            accept: 'application/json',
+                            Authorization: `Bearer ${this.token}`,
+                        },
+                    },
+                );
+                let data = await response.json();
+                console.log(data);
+            } else if (param === false) {
+                let response = await fetch(
+                    'https://todo-redev.herokuapp.com/api/todos?isCompleted=false',
+                    {
+                        method: 'GET',
+                        headers: {
+                            accept: 'application/json',
+                            Authorization: `Bearer ${this.token}`,
+                        },
+                    },
+                );
+                let data = await response.json();
+                console.log(data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-    throwOff = () => {
-        this.setState({ counter: 0 });
+    raiseCount = () => {
+        this.setState((state) => ({ count: state.count + 1 }));
     };
 
-    setRandomValue = () => {
-        this.setState({ counter: Math.ceil(Math.random() * 10) });
-    };
+    componentDidMount() {
+        this.getList(false);
+    }
 
-    reduce = () => {
-        this.state.counter > 0
-            ? this.setState({ counter: this.state.counter - 1 })
-            : this.setState({ counter: this.state.counter });
-    };
+    shouldComponentUpdate() {
+        return this.state.count % 2 !== 0;
+    }
+
+    componentDidUpdate() {
+        console.log(`Count updated: ${this.state.count}`);
+    }
+
+    componentWillUnmount() {
+        console.log('UnMount');
+    }
 
     render() {
         return (
-            <div className="wrapper">
-                <p>{this.state.counter}</p>
-                <button onClick={this.increase}>Increase</button>
-                <button onClick={this.throwOff}>Throw off</button>
-                <button onClick={this.setRandomValue}>Random value</button>
-                <button onClick={this.reduce}>Reduce</button>
-                <ChildComponent name="Hanna" value={this.state.counter} />
+            <div>
+                <p>Счет: {this.state.count}</p>
+                <button onClick={this.raiseCount}>Увеличить</button>
             </div>
         );
     }
 }
 
-export default ParentComponent;
+export default LifecycleComponent;
