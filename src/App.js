@@ -14,33 +14,18 @@ class LifecycleComponent extends React.Component {
 
     getList = async (param) => {
         try {
-            if (param === true) {
-                let response = await fetch(
-                    'https://todo-redev.herokuapp.com/api/todos?isCompleted=true',
-                    {
-                        method: 'GET',
-                        headers: {
-                            accept: 'application/json',
-                            Authorization: `Bearer ${this.token}`,
-                        },
+            let response = await fetch(
+                `https://todo-redev.herokuapp.com/api/todos?isCompleted=${param}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        accept: 'application/json',
+                        Authorization: `Bearer ${this.token}`,
                     },
-                );
-                let data = await response.json();
-                console.log(data);
-            } else if (param === false) {
-                let response = await fetch(
-                    'https://todo-redev.herokuapp.com/api/todos?isCompleted=false',
-                    {
-                        method: 'GET',
-                        headers: {
-                            accept: 'application/json',
-                            Authorization: `Bearer ${this.token}`,
-                        },
-                    },
-                );
-                let data = await response.json();
-                console.log(data);
-            }
+                },
+            );
+            let data = await response.json();
+            console.log(data);
         } catch (error) {
             console.log(error);
         }
