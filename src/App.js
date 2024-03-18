@@ -1,51 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useRef } from 'react';
+import ChildComponent from './components/ChildComponent.jsx';
 
 import './App.css';
 
 const LifecycleComponent = () => {
-    const [count, setCount] = React.useState(0);
-    const token =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFubmFhbmVjaGthMTExOTk5QGdtYWlsLmNvbSIsImlkIjoyODgsImlhdCI6MTcwOTM4MDI4OH0._kfiGuflpDTzJYNLPxZGp8aDC6J_Bu8hGXXuLulKYMM';
-
-    const raiseCount = () => {
-        setCount((count) => count + 1);
-    };
-
-    const getList = async (param) => {
-        try {
-            let response = await fetch(
-                `https://todo-redev.herokuapp.com/api/todos?isCompleted=${param}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        accept: 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                },
-            );
-            let data = await response.json();
-            console.log(data);
-        } catch (error) {
-            console.log(error);
+    const [state, setState] = React.useState([1, 2]);
+    const link = useRef(null);
+    const addFocus = () => link.current.focus();
+    const addItem = (event) => {
+        if (event.key === 'Enter') {
+            setState((data) => [...data, link.current.value]);
         }
     };
 
-    useEffect(() => {
-        getList(false);
-        return () => {
-            console.log('Unmount');
-        };
-    }, []);
-
-    useEffect(() => {
-        console.log(`Значение изменено: ${count}`);
-    }, [count]);
-
     return (
-        <div>
-            {count % 2 === 0 ? <p>Счет: {count}</p> : <p>Счет: {count - 1}</p>}
-            <button onClick={raiseCount}>Увеличить</button>
-        </div>
+        <>
+            <input ref={link} onKeyDown={addItem}></input>
+            <button onClick={addFocus}>Add focus</button>
+            <ChildComponent value={state} onItemChange={setState} />
+        </>
     );
 };
 
