@@ -1,18 +1,26 @@
-import React from 'react';
+import { memo, useCallback, useMemo } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
-export default function List({ value, onItemChange }) {
-    const addValue = (index) => {
-        const newData = [...value];
-        newData[index] = '!!!' + newData[index];
-        onItemChange(newData);
-    };
+const List = ({ value, onItemChange }) => {
+    const addValue = useCallback(
+        (index) => {
+            const newData = [...value];
+            newData[index] = '!!!' + newData[index];
+            onItemChange(newData);
+        },
+        [onItemChange, value],
+    );
 
-    let finalItems = value.map((item, index) => (
-        <li key={item.toString()}>
-            <button onClick={() => addValue(index)}>Add !!!</button>
-            {item}
-        </li>
-    ));
+    let finalItems = useMemo(() => {
+        return value.map((item, index) => (
+            <li key={uuidv4()}>
+                <button onClick={() => addValue(index)}>Add !!!</button>
+                {item}
+            </li>
+        ));
+    }, [addValue, value]);
 
     return <ul>{finalItems}</ul>;
-}
+};
+
+export default memo(List);

@@ -1,15 +1,15 @@
-import React, { useRef } from 'react';
+import { useState, useRef } from 'react';
 import ChildComponent from './components/ChildComponent.jsx';
 
 import './App.css';
 
-const LifecycleComponent = () => {
-    const [state, setState] = React.useState([1, 2]);
+const App = () => {
+    const [arrList, setArrList] = useState([1, 2]);
     const link = useRef(null);
     const addFocus = () => link.current.focus();
     const addItem = (event) => {
         if (event.key === 'Enter') {
-            setState((data) => [...data, link.current.value]);
+            setArrList((data) => [...data, link.current.value]);
         }
     };
 
@@ -17,9 +17,9 @@ const LifecycleComponent = () => {
         <>
             <input ref={link} onKeyDown={addItem}></input>
             <button onClick={addFocus}>Add focus</button>
-            <ChildComponent value={state} onItemChange={setState} />
+            <ChildComponent value={arrList} onItemChange={setArrList} />
         </>
     );
 };
 
-export default LifecycleComponent;
+export default App;
